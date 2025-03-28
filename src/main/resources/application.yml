@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: cssr
+app:
+  aerospike:
+    host: localhost
+    port: 3000
+    namespace: cssr
+
+springdoc:
+  api-docs:
+    path: /api-docs
