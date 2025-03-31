@@ -8,13 +8,14 @@ import org.springframework.http.HttpStatus;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class SuccessResponse<Payload> extends AbstractResponse{
-    private Payload data;
+public class SuccessResponse<Payload> extends AbstractResponse {
+    private final Payload data;
 
-    public SuccessResponse(String message, HttpStatus code, Payload data) {
-        super(ResponseStatusType.SUCCESS, message, code.value());
+    public SuccessResponse(String message, Payload data) {
+        super(true, message);
         this.data = data;
+    }
+    public SuccessResponse(Payload data) {
+        this(null,data);
     }
 }

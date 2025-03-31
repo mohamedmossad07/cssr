@@ -6,7 +6,6 @@ app:
     host: localhost
     port: 3000
     namespace: cssr
-
 springdoc:
   api-docs:
     path: /api-docs

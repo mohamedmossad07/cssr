@@ -1,10 +1,7 @@
 package org.exalt.cssr.users;
 
-import com.aerospike.client.query.IndexCollectionType;
 import com.aerospike.client.query.IndexType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -14,8 +11,8 @@ import org.springframework.data.aerospike.annotation.Indexed;
 import org.springframework.data.aerospike.mapping.Document;
 import org.springframework.data.annotation.Id;
 
-import static io.swagger.v3.oas.annotations.media.Schema.*;
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 /**
  * Represents a user in the system (either a driver or an owner)
@@ -26,7 +23,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
 @Builder
 public class User {
     @Id
-    @Schema(description = "Unique identifier of the user", example = "usr123" ,requiredMode = NOT_REQUIRED)
+    @Schema(description = "Unique identifier of the user", example = "usr123", requiredMode = NOT_REQUIRED)
     private String id;
 
     @Schema(description = "Username[firstname+lastname] for the user[Driver/Owner]", example = "Mohamed Mossad", requiredMode = REQUIRED)

@@ -16,8 +16,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     /**
-     *
      * {@inheritDoc}
+     *
      * @throws ApiRequestException if username or email already exists
      */
     @Override
@@ -33,13 +33,14 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
+     *
      * @throws ApiRequestException if user not found
      */
     @Override
     public Optional<User> findUserById(String id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent())
-           return user;
-        throw  new ApiRequestException("This user doesn't exists.",HttpStatus.NOT_FOUND);
+            return user;
+        throw new ApiRequestException("This user doesn't exists.", HttpStatus.NOT_FOUND);
     }
 }

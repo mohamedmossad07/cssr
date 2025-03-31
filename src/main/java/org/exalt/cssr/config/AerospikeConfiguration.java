@@ -1,7 +1,6 @@
 package org.exalt.cssr.config;
 
 import com.aerospike.client.Host;
-import org.exalt.cssr.users.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.aerospike.config.AbstractAerospikeDataConfiguration;
@@ -11,7 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Configuration
-@EnableAerospikeRepositories(basePackages= {"org.exalt.cssr"})
+@EnableAerospikeRepositories(basePackages = {"org.exalt.cssr"})
 public class AerospikeConfiguration extends AbstractAerospikeDataConfiguration {
     @Value("${app.aerospike.host}")
     private String aerospikeHost;

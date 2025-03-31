@@ -1,0 +1,62 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://cssr.reservations.org"
+           targetNamespace="http://cssr.reservations.org" elementFormDefault="qualified">
+
+    <xs:element name="getAvailableCars"/>
+
+    <xs:element name="getAvailableCarsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="carSoap" type="tns:carSoap" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createReservation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="tns:reservationSoap"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="confirmReservation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="reservationId" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="reservationSoap">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="carId" type="xs:string"/>
+            <xs:element name="driverId" type="xs:string"/>
+            <xs:element name="startTime" type="xs:dateTime"/>
+            <xs:element name="endTime" type="xs:dateTime"/>
+            <xs:element name="reservationStatus" type="tns:reservationStatusSoap"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="carSoap">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="ownerId" type="xs:string"/>
+            <xs:element name="make" type="xs:string"/>
+            <xs:element name="model" type="xs:string"/>
+            <xs:element name="year" type="xs:int"/>
+            <xs:element name="hourly_rate" type="xs:double"/>
+            <xs:element name="available" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:simpleType name="reservationStatusSoap">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PENDING"/>
+            <xs:enumeration value="CONFIRMED"/>
+            <xs:enumeration value="COMPLETED"/>
+            <xs:enumeration value="CANCELLED"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

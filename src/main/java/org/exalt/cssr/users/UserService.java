@@ -1,7 +1,5 @@
 package org.exalt.cssr.users;
 
-import jakarta.validation.Valid;
-
 import java.util.Optional;
 
 /**
@@ -10,6 +8,7 @@ import java.util.Optional;
 public interface UserService {
     /**
      * Register user (OWNER/DRIVER)
+     *
      * @param user user to registered
      * @return the registered user as a response
      */

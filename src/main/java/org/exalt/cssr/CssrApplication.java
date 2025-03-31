@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CssrApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CssrApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CssrApplication.class, args);
+    }
 
 }

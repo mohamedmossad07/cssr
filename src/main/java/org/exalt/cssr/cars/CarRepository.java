@@ -8,6 +8,7 @@ import java.util.List;
 public interface CarRepository extends AerospikeRepository<Car, String> {
     /**
      * Find All cars belongs to an owner
+     *
      * @param ownerId owner id
      * @return cars belongs to the owner
      */
@@ -15,6 +16,7 @@ public interface CarRepository extends AerospikeRepository<Car, String> {
 
     /**
      * find all available cars
+     *
      * @param available status
      * @return available cars
      */

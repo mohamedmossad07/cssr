@@ -11,12 +11,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.exalt.cssr.exceptions.ApiRequestException;
 import org.exalt.cssr.responses.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -35,8 +35,8 @@ public class CarController {
     @Operation(summary = "Add a new car", description = "Allows owners to register their cars for rental")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Car added successfully",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Car.class)) }),
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Car.class))}),
             @ApiResponse(responseCode = "404", description = "Car owner doesn't exists."),
             @ApiResponse(responseCode = "403", description = "Only owners can add cars"),
             @ApiResponse(responseCode = "500", description = "Internal server error if car deleted occasionally")
@@ -48,8 +48,8 @@ public class CarController {
         Optional<Car> addedCar = carService.addCar(car);
         if (addedCar.isPresent())
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new SuccessResponse<>("Car added successfully.", HttpStatus.CREATED, addedCar.get()));
-        throw new IllegalStateException("Something went wrong internally.");
+                    .body(new SuccessResponse<>("Car added successfully.", addedCar.get()));
+        throw new ApiRequestException("Something went wrong internally.",HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -61,15 +61,15 @@ public class CarController {
     @Operation(summary = "Get cars by owner", description = "Returns all cars registered by a specific owner")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of cars found",
-                    content = { @Content(mediaType = "application/json", array = @ArraySchema(schema =  @Schema(implementation = Car.class))) }),
+                    content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Car.class)))}),
             @ApiResponse(responseCode = "404", description = "Owner not found")
     })
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<?> getCarsByOwner(
             @Parameter(description = "ID of the owner", required = true)
             @PathVariable String ownerId) {
-        return  ResponseEntity.status(HttpStatus.OK)
-                .body(new SuccessResponse<>(null, HttpStatus.OK, carService.getCarsByOwner(ownerId)));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new SuccessResponse<>( carService.getCarsByOwner(ownerId)));
     }
 
     /**
@@ -80,12 +80,12 @@ public class CarController {
     @Operation(summary = "Get available cars", description = "Returns all cars currently available for rental")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of available cars",
-                    content = { @Content(mediaType = "application/json"
-                            , array = @ArraySchema(schema =  @Schema(implementation = Car.class))) })
+                    content = {@Content(mediaType = "application/json"
+                            , array = @ArraySchema(schema = @Schema(implementation = Car.class)))})
     })
     @GetMapping("/available")
     public ResponseEntity<?> getAvailableCars() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new SuccessResponse<>(null, HttpStatus.OK, carService.getAvailableCars()));
+                .body(new SuccessResponse<>(carService.getAvailableCars()));
     }
 }
