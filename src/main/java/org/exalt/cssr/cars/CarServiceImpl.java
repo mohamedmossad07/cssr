@@ -21,10 +21,14 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
     private final UserService userService;
 
+
     /**
-     * {@inheritDoc}
+     * adding new car
      *
-     * @throws ApiRequestException if owner is not valid
+     * @param car car details
+     * @return {@link Optional}
+     * @see Optional
+     * @see Car
      */
     @Override
     public Optional<Car> addCar(Car car) {
@@ -38,7 +42,12 @@ public class CarServiceImpl implements CarService {
     }
 
     /**
-     * {@inheritDoc}
+     *  get cars owned to the user
+     *
+     * @param ownerId ownerId
+     * @return {@link List}
+     * @see List
+     * @see Car
      */
     @Override
     public List<Car> getCarsByOwner(String ownerId) {
@@ -46,7 +55,11 @@ public class CarServiceImpl implements CarService {
     }
 
     /**
-     * {@inheritDoc}
+     *  get available cars right now
+     *
+     * @return {@link List}
+     * @see List
+     * @see Car
      */
     @Override
     public List<Car> getAvailableCars() {

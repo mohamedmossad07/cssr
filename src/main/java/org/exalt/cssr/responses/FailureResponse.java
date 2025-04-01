@@ -3,7 +3,6 @@ package org.exalt.cssr.responses;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 /**
  * Api Failure Response

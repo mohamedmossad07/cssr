@@ -11,18 +11,34 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="createReservation">
+    <xs:element name="createReservationRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="name" type="tns:reservationSoap"/>
+                <xs:element name="reservationSoap" type="tns:reservationSoap"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="confirmReservation">
+    <xs:element name="createReservationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="reservationSoap" type="tns:reservationSoap"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="confirmReservationRequest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="reservationId" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="confirmReservationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="confirmed" type="xs:boolean"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -34,7 +50,7 @@
             <xs:element name="driverId" type="xs:string"/>
             <xs:element name="startTime" type="xs:dateTime"/>
             <xs:element name="endTime" type="xs:dateTime"/>
-            <xs:element name="reservationStatus" type="tns:reservationStatusSoap"/>
+            <xs:element name="reservationStatus"  type="tns:reservationStatusSoap"/>
         </xs:sequence>
     </xs:complexType>
 

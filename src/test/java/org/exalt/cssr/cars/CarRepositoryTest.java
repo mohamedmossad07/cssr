@@ -12,11 +12,13 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class CarRepositoryTest {
+
     @Autowired
     private CarRepository carRepository;
-    private final Car sampleCar = Car.builder().id("1000").year(2020).make("Toyota").ownerId("1").hourly_rate(50.5).model("Alentra").build();
+    private final Car sampleCar = Car.builder().id("1000").year(2020).make("Toyota").ownerId("1").hourly_rate(50.5).model("Alentra").available(true).build();
+
     @Test
-    void should_car_to_db(){
+    void should_insert_car_to_db(){
         Car savedCar = carRepository.save(sampleCar);
         assertNotNull(savedCar);
         assertEquals(sampleCar.getId(), savedCar.getId());
@@ -25,7 +27,7 @@ class CarRepositoryTest {
         assertEquals(sampleCar.getHourly_rate(), savedCar.getHourly_rate());
     }
     @Test
-    void should_find_owner_list_of_cars_in_db(){
+    void should_find_list_of_cars_belonging_to_owner(){
         List<Car> cars = carRepository.findByOwnerId(sampleCar.getOwnerId());
         assertNotNull(cars);
         assertThat(cars).hasSizeGreaterThanOrEqualTo(1);

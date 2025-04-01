@@ -1,15 +1,18 @@
 package org.exalt.cssr.reservations;
 
+import com.aerospike.client.query.IndexType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.aerospike.annotation.Indexed;
 import org.springframework.data.aerospike.mapping.Document;
-import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.annotation.Id;
+
 import java.time.LocalDateTime;
 
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.*;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 /**
  * Represents a car reservation between a driver and an owner
@@ -28,8 +31,9 @@ public class Reservation {
     @NotBlank
     private String carId;
 
-    @Schema(description = "ID of the driver making the reservation", example = "usr123",requiredMode = REQUIRED)
+    @Schema(description = "ID of the driver making the reservation", example = "usr123", requiredMode = REQUIRED)
     @NotBlank
+    @Indexed(type = IndexType.STRING)
     private String driverId;
 
     @Schema(description = "Start date and time of reservation", example = "2023-12-01T10:00:00", requiredMode = REQUIRED)

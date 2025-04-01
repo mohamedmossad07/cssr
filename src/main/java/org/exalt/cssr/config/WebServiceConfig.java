@@ -1,5 +1,6 @@
 package org.exalt.cssr.config;
 
+import org.luaj.vm2.ast.Str;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +20,11 @@ import org.springframework.xml.xsd.XsdSchema;
 @Configuration
 public class WebServiceConfig extends WsConfigurerAdapter {
 
+    public static final String TARGET_NAMESPACE = "http://cssr.reservations.org";
+
     /**
      * Configure the servlet to dispatch traffic on /api/ws/reservations/*
+     *
      * @param applicationContext applicationContext
      * @return ServletRegistrationBean
      */
@@ -34,6 +38,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 
     /**
      * Creating the wsdl with name of reservations.wsdl
+     *
      * @param reservationsSchema reservationsSchema
      * @return DefaultWsdl11Definition
      */
@@ -41,14 +46,15 @@ public class WebServiceConfig extends WsConfigurerAdapter {
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema reservationsSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("ReservationsPort");
-        wsdl11Definition.setLocationUri("/api/ws/reservation");
-        wsdl11Definition.setTargetNamespace("http://cssr.reservations.org");
+        wsdl11Definition.setLocationUri("/api/ws/reservations");
+        wsdl11Definition.setTargetNamespace(TARGET_NAMESPACE);
         wsdl11Definition.setSchema(reservationsSchema);
         return wsdl11Definition;
     }
 
     /**
      * Registering the XSD file
+     *
      * @return XsdSchema
      */
     @Bean

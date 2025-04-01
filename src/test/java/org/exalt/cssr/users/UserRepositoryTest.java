@@ -9,9 +9,11 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserRepositoryTest {
+
     @Autowired
     private UserRepository userRepository;
     private final User sampleUser = User.builder().id("1000").username("Mohamed mossad").email("test@test.test").phone("01061218341").type(UserType.DRIVER).build();
+
     @Test
     void should_insert_user_to_db(){
         User savedUser = userRepository.save(sampleUser);

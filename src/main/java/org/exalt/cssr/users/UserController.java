@@ -44,7 +44,7 @@ public class UserController {
         Optional<User> registeredUser = userService.registerUser(user);
         if (registeredUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new SuccessResponse<>("User Registered successfully.",registeredUser.get()));
+                    .body(new SuccessResponse<>("User Registered successfully.", registeredUser.get()));
         }
         throw new IllegalStateException("Something went wrong internally.");
     }
@@ -66,8 +66,8 @@ public class UserController {
     public ResponseEntity<AbstractResponse> findUserById(
             @Parameter(description = "ID of the user to retrieve", required = true)
             @PathVariable String id) {
-        User user = userService.findUserById(id).orElseThrow(() -> new ApiRequestException("User not found",HttpStatus.NOT_FOUND));
+        User user = userService.findUserById(id).orElseThrow(() -> new ApiRequestException("User not found", HttpStatus.NOT_FOUND));
         return ResponseEntity.status(HttpStatus.OK).
-                body(new SuccessResponse<>( user));
+                body(new SuccessResponse<>(user));
     }
 }

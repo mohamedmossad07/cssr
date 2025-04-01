@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,6 +29,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final LocationProducer locationProducer;
     private final ExecutorService defaultExecutorService = Executors.newCachedThreadPool();
     private final ExecutorService customExecutorService = Executors.newCachedThreadPool(ReservationThreadFactory.getInstance());
+
     /**
      * Creates a new reservation in PENDING state
      *
@@ -45,13 +44,13 @@ public class ReservationServiceImpl implements ReservationService {
             throw new ApiRequestException("Start time must be in the future", HttpStatus.BAD_REQUEST);
         }
         if (reservation.getEndTime().isBefore(reservation.getStartTime())) {
-            throw new ApiRequestException("End time must be after start time",HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException("End time must be after start time", HttpStatus.BAD_REQUEST);
         }
 
         // Check car availability
         Optional<Car> car = carRepository.findById(reservation.getCarId());
         if (car.isEmpty() || !car.get().isAvailable()) {
-            throw new ApiRequestException("Car is not available for rental",HttpStatus.CONFLICT);
+            throw new ApiRequestException("Car is not available for rental", HttpStatus.CONFLICT);
         }
 
         reservation.setStatus(ReservationStatus.PENDING);
@@ -68,10 +67,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservation confirmReservation(String reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ApiRequestException("Reservation not found",HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ApiRequestException("Reservation not found", HttpStatus.NOT_FOUND));
 
         if (reservation.getStatus() != ReservationStatus.PENDING) {
-            throw new ApiRequestException("Only PENDING reservations can be confirmed",HttpStatus.CONFLICT);
+            throw new ApiRequestException("Only PENDING reservations can be confirmed", HttpStatus.CONFLICT);
         }
 
         reservation.setStatus(ReservationStatus.CONFIRMED);
@@ -80,16 +79,29 @@ public class ReservationServiceImpl implements ReservationService {
         // Mark car as unavailable
         Optional<Car> car = carRepository.findById(reservation.getCarId());
         if (car.isEmpty())
-            throw new ApiRequestException("Car is not found.",HttpStatus.NOT_FOUND);
+            throw new ApiRequestException("Car is not found.", HttpStatus.NOT_FOUND);
 
         car.get().setAvailable(false);
         carRepository.save(car.get());
 
         // Start sending location updates
         //option 1
-        defaultExecutorService.execute(() -> startLocationUpdates(confirmedReservation));
+//        defaultExecutorService.execute(() -> {
+//            try {
+//                startLocationUpdates(confirmedReservation);
+//            } catch (InterruptedException e) {
+//                throw new ApiRequestException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        });
+
         //option 2
-//        customExecutorService.execute(() -> startLocationUpdates(confirmedReservation));
+        customExecutorService.execute(() -> {
+            try {
+                startLocationUpdates(confirmedReservation);
+            } catch (InterruptedException e) {
+                throw new ApiRequestException(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        });
 
         return confirmedReservation;
     }
@@ -99,9 +111,10 @@ public class ReservationServiceImpl implements ReservationService {
      *
      * @param reservation the confirmed reservation to track
      */
-    private void startLocationUpdates(Reservation reservation) {
-
-        while (LocalDateTime.now().isBefore(reservation.getEndTime())){
+    private void startLocationUpdates(Reservation reservation) throws InterruptedException {
+//        while (LocalDateTime.now().isBefore(reservation.getEndTime())){
+        int i = 10;
+        while (i-- > 0) {
 
             // Simulate getting car location (in real app, this would come from GPS)
             LocationEvent event = LocationEvent.builder()
@@ -112,6 +125,7 @@ public class ReservationServiceImpl implements ReservationService {
                     .timestamp(LocalDateTime.now()).build();
 
             locationProducer.sendLocationEvent(event);
+            Thread.sleep(1000);
         }
 
         // Update reservation status
@@ -121,7 +135,7 @@ public class ReservationServiceImpl implements ReservationService {
         // Mark car as available again
         Optional<Car> car = carRepository.findById(reservation.getCarId());
         if (car.isEmpty())
-            throw new ApiRequestException("Car not found.",HttpStatus.NOT_FOUND);
+            throw new ApiRequestException("Car not found.", HttpStatus.NOT_FOUND);
         car.get().setAvailable(true);
         carRepository.save(car.get());
 

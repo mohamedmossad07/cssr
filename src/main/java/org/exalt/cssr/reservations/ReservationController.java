@@ -33,8 +33,8 @@ public class ReservationController {
     @Operation(summary = "Create a reservation", description = "Creates a new reservation request in PENDING state")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reservation created",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Reservation.class)) }),
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Reservation.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "409", description = "Car not available for requested time")
     })
@@ -55,8 +55,8 @@ public class ReservationController {
     @Operation(summary = "Confirm a reservation", description = "Confirms a PENDING reservation by the car owner")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reservation confirmed",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Reservation.class)) }),
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Reservation.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid reservation ID"),
             @ApiResponse(responseCode = "404", description = "Reservation or Car not found"),
             @ApiResponse(responseCode = "409", description = "Reservation already confirmed or cancelled")
@@ -78,13 +78,14 @@ public class ReservationController {
     @Operation(summary = "Get driver reservations", description = "Returns all reservations for a specific driver")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of reservations found",
-                    content = { @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Reservation.class))) }),
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Reservation.class)))}),
     })
     @GetMapping("/driver/{driverId}")
     public List<Reservation> getDriverReservations(
             @Parameter(description = "ID of the driver", required = true)
             @PathVariable String driverId) {
+
         return reservationService.getReservationsByDriver(driverId);
     }
 }

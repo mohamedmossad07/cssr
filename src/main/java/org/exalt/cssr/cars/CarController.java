@@ -34,7 +34,7 @@ public class CarController {
      */
     @Operation(summary = "Add a new car", description = "Allows owners to register their cars for rental")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Car added successfully",
+            @ApiResponse(responseCode = "201", description = "Car added successfully",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Car.class))}),
             @ApiResponse(responseCode = "404", description = "Car owner doesn't exists."),
@@ -49,7 +49,7 @@ public class CarController {
         if (addedCar.isPresent())
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new SuccessResponse<>("Car added successfully.", addedCar.get()));
-        throw new ApiRequestException("Something went wrong internally.",HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new ApiRequestException("Something went wrong internally.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -69,7 +69,7 @@ public class CarController {
             @Parameter(description = "ID of the owner", required = true)
             @PathVariable String ownerId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new SuccessResponse<>( carService.getCarsByOwner(ownerId)));
+                .body(new SuccessResponse<>(carService.getCarsByOwner(ownerId)));
     }
 
     /**
